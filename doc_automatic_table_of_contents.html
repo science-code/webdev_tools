@@ -1,0 +1,223 @@
+<html>
+<head>
+	<title>Document header</title>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+	<!-- <link rel="stylesheet" type="text/css" href="manual.css"> -->
+	<style>
+		a{text-decoration:none;	border-bottom:1px dotted;}
+		h1>a{text-decoration:none;	border-bottom:0px;}
+		h2>a{text-decoration:none;	border-bottom:0px;}
+		h3>a{text-decoration:none;	border-bottom:0px;}
+		a:link {color:black;}
+		a:visited {text-decoration:none; color:black;}
+		a:hover {text-decoration:none; background-color:#FFD700; color:black;}
+		a:active {text-decoration:none; color:black;}
+
+		#logo
+			{
+				background-color:#FFD700;
+				border:3px solid #FFD700;
+				-webkit-border-bottom-right-radius: 5px; -moz-border-radius-bottomright: 5px; border-bottom-right-radius: 5px;
+				-webkit-border-bottom-left-radius: 5px; -moz-border-radius-bottomleft: 5px; border-bottom-left-radius: 5px;
+				font-size: 1.0em;
+			}
+
+		body {
+			margin: 0% 15% 0% 15%; 
+			counter-reset: section1;
+			background: whitesmoke;
+			font-family: "Verdana, Serif"; 
+			font-size: 0.8em;
+		}
+
+		table {border-collapse:collapse;}
+
+		table.footer {border-collapse: separate;}
+
+		th, td 
+		{
+			font-size: 0.8em;
+			border:1px solid whitesmoke;
+			padding:3px 7px 2px 7px;
+		}
+
+		h1 {
+		  counter-reset: section2;
+		  display: block;
+		  background: gold;
+		  margin-left: -5em;
+		  padding-left: 1em;
+		}
+		h1:before {
+		  counter-increment: section1;
+		  content: "Chapter " counter(section1) ". ";
+		}
+		h2 {
+		  counter-reset: section3;
+		  background: royalblue;
+		  margin-left: -4em;
+		  padding-left: 2em;
+		}
+		h2:before {
+		  counter-increment: section2;
+		  content: counter(section1) "." counter(section2) " ";
+		}
+		h3:before {
+		  counter-increment: section3;
+		  content: counter(section1) "." counter(section2) "." counter(section3) " ";
+		}
+		h3 {
+		  background: violet;
+		  margin-left: -3em;
+		  padding-left: 1em;
+		}
+
+		caption
+		{
+			text-align: center;
+			caption-side: top;
+			font-weight: bold;
+		}
+
+		#potionstable td, th {	border:1px solid black; border-collapse:separate;}
+		#potionstable td{	text-align: center;}
+
+		.hidden {display: none; }
+		.visible {display: inline;}
+	</style>
+
+	<script language="javascript" type="text/javascript">
+		function show(glava)
+		{
+			if (document.getElementById(glava).className == "hidden") 
+			{
+				document.getElementById(glava).className = "visible";
+				document.getElementById(glava+"sign").innerHTML = "<span style=\"cursor: pointer; color: crimson; font-weight: bold; min-width: 10px\"> - </span>";
+			} 
+			else 
+			{
+				document.getElementById(glava).className = "hidden";
+				document.getElementById(glava+"sign").innerHTML = "<span style=\"cursor: pointer; font-weight: bold; min-width: 10px\"> + </span>";
+			}
+		}
+		function generate_index()
+		{
+			// Obtain first element
+			var h1s=document.getElementsByTagName("h1");
+ 			var node = h1s[0];
+
+			//alert (node.nodeName);
+			var h1=0; 
+			var h2=0;
+			var h3=0;
+
+ 			while (node)
+ 			{
+				if (node.nodeName == "H1") 
+				{
+				// reset counters
+					h1++; 
+					h2=0; 
+					h3=0;
+
+					var htitle = node.innerHTML;
+					node.innerHTML = "<a name=\"glava" + h1 + "\">" + htitle + "</a>"
+	
+				// Include in index
+					var old = document.getElementById("manual_index").innerHTML;
+
+					document.getElementById("manual_index").innerHTML = old + 
+					"<tr>\
+						<td onmouseout=\"this.style.background='whitesmoke'; this.style.color='lime';\" \
+							onmouseover=\"this.style.background='gold'; this.style.color='black';\" \
+							style=\"cursor: pointer; vertical-align: top; color: lime;\" \
+							id=\"long" + h1 + "sign\" \
+							onclick=\"javascript:show('long"+ h1 + "')\">\
+							<span style=\"cursor: pointer; font-weight: bold; min-width: 10px\"> + </span>\
+						</td>\
+						<td><b><a href=\"#glava" + h1 +"\">" + h1 + ". " + htitle + "</a></b> \
+							<div id=\"long" + h1 + "\" class=\"hidden\"></div>\
+						</td>\
+					</tr>";
+				}
+				else if (node.nodeName == "H2")
+ 				{
+				// reset counters
+					h2++; 
+					h3=0;
+
+					var htitle = node.innerHTML;
+					node.innerHTML = "<a name=\"razdel" + h1 + "." + h2 + "\">" + htitle + "</a>"
+	
+				// Include in index
+					var old = document.getElementById("long" + h1).innerHTML;
+					document.getElementById("long" + h1).innerHTML = old + 
+					"<div style=\"padding-left: 10px\"><a href=\"#razdel" + h1 + "." + h2 +"\">" + h1 + "." + h2 + " " + htitle + "</a></div>";
+ 				}
+				else if (node.nodeName == "H3")
+ 				{
+				// reset counters
+					h3++;
+
+					var htitle = node.innerHTML;
+					node.innerHTML = "<a name=\"podrazdel" + h1 + "." + h2 + "." + h3 + "\">" + htitle + "</a>"
+	
+				// Include in index
+					var old = document.getElementById("long" + h1).innerHTML;
+					document.getElementById("long" + h1).innerHTML = old + 
+					"<div style=\"padding-left: 20px\"><a href=\"#podrazdel" + h1 + "." + h2 + "." + h3  +"\">" + h1 + "." + h2 + "." + h3  + " " + htitle + "</a></div>";
+ 				}
+				node = node.nextSibling;
+ 			}
+		}
+	</script>
+
+</head>
+<body>
+<h4 style="text-align:center"><font size="4">Document title</font></h4>
+<h5 style="text-align:center">ver. 0.91 (2012.09.21)<br>Subtitle</h5>
+
+
+<table id="manual_index" cellspacing="0" cellpadding="0"></table>
+
+<h1>Chapter name</h1>
+<h2>Section name</h2>
+Content
+
+<h2>Section name</h2>
+<h3>Subsection name </h3>
+Content 
+
+<h3>Subsection name </h3>
+Content
+
+List:
+<ul>
+	<li>Item</li>
+	<li>Item</li>
+	<li>Item</li>
+</ul>
+
+<h1>Chapter name</h1>
+<h2>Section name</h2>
+<h2>Section name</h2>
+<h3>Subsection name </h3>
+Content 
+
+<h1>Chapter name</h1>
+<h2>Section name</h2>
+<h3>Subsection name </h3>
+Content 
+<h2>Section name</h2>
+Content 
+
+<br>
+<div style="text-align:right"><b>Аuthor:</b> Mihai</div>
+<div style="text-align:right"><b>Co-authors:</b> Name Surname</div>
+
+	<script type="text/javascript">
+		generate_index();
+	</script>
+
+</body>
+</html>
